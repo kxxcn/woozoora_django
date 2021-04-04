@@ -14,6 +14,7 @@ urlpatterns = [
     path('user/<str:user_id>/year', views.year),
     path('user/<str:user_id>/budget', views.budget),
     path('user/<str:user_id>/ask', views.ask),
+    path('user/<str:user_id>/leave', views.leave),
 
     path('transaction', views.transaction),
 

@@ -320,6 +320,18 @@ def ask(request, user_id):
             return HttpResponseNotModified()
 
 
+def leave(request, user_id):
+    if request.method == 'POST':
+        try:
+            User.objects.filter(id=user_id).delete()
+            Transaction.objects.filter(user_id=user_id).delete()
+            Ask.objects.filter(userId=user_id).delete()
+            return HttpResponse(status=204)
+        except Exception as e:
+            print(e)
+            return HttpResponseNotModified()
+
+
 @api_view(['GET'])
 @permission_classes((permissions.AllowAny,))
 def notice(request):
