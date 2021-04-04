@@ -15,7 +15,7 @@ urlpatterns = [
     path('user/<str:user_id>/budget', views.budget),
     path('user/<str:user_id>/ask', views.ask),
 
-    path('transaction/register', views.register_transaction),
+    path('transaction', views.transaction),
 
     path('notice', views.notice)
 ]

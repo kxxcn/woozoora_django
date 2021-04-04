@@ -155,7 +155,7 @@ def budget(request, user_id):
             return HttpResponseNotModified()
 
 
-def register_transaction(request):
+def transaction(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -223,7 +223,13 @@ def register_transaction(request):
                 )
             return HttpResponse(status=204)
         except Exception as e:
-            print(e)
+            return HttpResponseNotModified()
+    elif request.method == 'DELETE':
+        try:
+            data = json.loads(request.body)
+            Transaction.objects.filter(id=data['id']).delete()
+            return HttpResponse(status=204)
+        except Exception as e:
             return HttpResponseNotModified()
 
 
