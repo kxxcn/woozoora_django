@@ -3,6 +3,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('', views.index),
+
     path('policy/personal', views.personal),
     path('policy/source', views.source),
 

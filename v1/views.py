@@ -15,6 +15,10 @@ from .serializer import UserSerializer, TransactionSerializer, NoticeSerializer
 from .slack_message import send_to_slack_message
 
 
+def index(request):
+    return render(request, 'index.html')
+
+
 def personal(request):
     return render(request, 'personal.html')
 
