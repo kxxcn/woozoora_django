@@ -9,7 +9,7 @@ from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from .fcm_notification import send_to_firebase_cloud_messaging
+from .fcm_notification import send_message_when_registered_account_book, send_message_when_invite_successful
 from .models import User, Transaction, Notice, Ask
 from .serializer import UserSerializer, TransactionSerializer, NoticeSerializer
 from .slack_message import send_to_slack_message
@@ -69,20 +69,33 @@ def register_user(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
+
+            transaction_code = data['code']
+
+            if 'sponsor' in transaction_code:
+                transaction_code = User.objects.get(id=transaction_code.split('_')[1]).code
+
             User(
                 id=data['id'],
                 name=data['name'],
                 email=data['email'],
                 profile=data['profile'],
-                code=data['code'],
+                code=transaction_code,
                 token=data['token'],
                 budget=data['budget'],
                 date=data['date'],
                 year=data['year'],
                 type=data['type']
             ).save()
+
+            groups = User.objects.filter(code=transaction_code).exclude(id=data['id'])
+            tokens = list(map(lambda u: u.token, groups))
+
+            send_message_when_invite_successful(tokens, "channel_default", data['name'])
+
             return HttpResponse(status=204)
         except Exception as e:
+            print(e)
             return HttpResponseNotModified()
 
 
@@ -126,7 +139,12 @@ def code(request, user_id):
             user.code = new_code
             user.save()
 
-            return HttpResponse()
+            groups = User.objects.filter(code=new_code).exclude(id=user_id)
+            tokens = list(map(lambda u: u.token, groups))
+
+            send_message_when_invite_successful(tokens, "channel_default", user.name)
+
+            return HttpResponse(new_code)
         except Exception as e:
             return HttpResponseNotModified()
 
@@ -214,7 +232,7 @@ def transaction(request):
                     user.name
                 )
 
-                send_to_firebase_cloud_messaging(
+                send_message_when_registered_account_book(
                     tokens,
                     'channel_registration',
                     title,
