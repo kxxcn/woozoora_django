@@ -111,8 +111,10 @@ def transactions(request, user_id):
 def code(request, user_id):
     if request.method == 'POST':
         try:
-            new_code = request.POST.get('code', None)
+            sponsor_id = request.POST.get('sponsor_id', None)
             transfer = request.POST.get('transfer', None)
+
+            new_code = User.objects.get(id=sponsor_id).code
 
             user = User.objects.get(id=user_id)
 
