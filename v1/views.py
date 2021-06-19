@@ -70,17 +70,17 @@ def register_user(request):
         try:
             data = json.loads(request.body)
 
-            transaction_code = data['code']
+            t_code = data['code']
 
-            if 'sponsor' in transaction_code:
-                transaction_code = User.objects.get(id=transaction_code.split('_')[1]).code
+            if 'sponsor' in t_code:
+                t_code = User.objects.get(id=t_code.split('_')[1]).code
 
             User(
                 id=data['id'],
                 name=data['name'],
                 email=data['email'],
                 profile=data['profile'],
-                code=transaction_code,
+                code=t_code,
                 token=data['token'],
                 budget=data['budget'],
                 date=data['date'],
@@ -88,7 +88,7 @@ def register_user(request):
                 type=data['type']
             ).save()
 
-            groups = User.objects.filter(code=transaction_code).exclude(id=data['id'])
+            groups = User.objects.filter(code=t_code).exclude(id=data['id'])
             tokens = list(map(lambda u: u.token, groups))
 
             send_message_when_invite_successful(tokens, "channel_default", data['name'])
