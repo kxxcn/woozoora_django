@@ -20,5 +20,7 @@ urlpatterns = [
 
     path('transaction', views.transaction),
 
-    path('notice', views.notice)
+    path('notice', views.notice),
+
+    path('reply', views.reply),
 ]

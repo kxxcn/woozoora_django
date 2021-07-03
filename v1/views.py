@@ -10,8 +10,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from .fcm_notification import send_message_when_registered_account_book, send_message_when_invite_successful
-from .models import User, Transaction, Notice, Ask
-from .serializer import UserSerializer, TransactionSerializer, NoticeSerializer
+from .models import User, Transaction, Ask, Notice
+from .serializer import UserSerializer, TransactionSerializer, NoticeSerializer, AskSerializer
 from .slack_message import send_to_slack_message
 
 
@@ -264,7 +264,7 @@ def ask(request, user_id):
             user = User.objects.get(id=user_id)
 
             Ask(
-                userId=user_id,
+                user_id=user_id,
                 message=data['message'],
                 device=data['device'],
                 os=data['os'],
@@ -349,7 +349,6 @@ def leave(request, user_id):
         try:
             User.objects.filter(id=user_id).delete()
             Transaction.objects.filter(user_id=user_id).delete()
-            Ask.objects.filter(userId=user_id).delete()
             return HttpResponse(status=204)
         except Exception as e:
             print(e)
@@ -365,4 +364,17 @@ def notice(request):
             serializer = NoticeSerializer(notices, many=True)
             return Response(serializer.data)
         except Exception as e:
+            return HttpResponseNotFound()
+
+
+@api_view(['GET'])
+@permission_classes((permissions.AllowAny,))
+def reply(request):
+    if request.method == 'GET':
+        try:
+            asks = Ask.objects.all()
+            serializer = AskSerializer(asks, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            print(e)
             return HttpResponseNotFound()

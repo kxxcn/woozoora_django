@@ -39,7 +39,7 @@ class Exclude(models.Model):
 
 
 class Ask(models.Model):
-    userId = models.CharField(max_length=50, blank=False, null=False)
+    user_id = models.CharField(db_column='userId', max_length=50, blank=False, null=False)
     message = models.CharField(max_length=500, blank=True, null=True)
     version = models.CharField(max_length=100, blank=True, null=True)
     device = models.CharField(max_length=20, blank=True, null=True)
@@ -59,3 +59,13 @@ class Notice(models.Model):
     class Meta:
         managed = False
         db_table = 'notice'
+
+
+class Reply(models.Model):
+    message = models.CharField(max_length=500, blank=False, null=False)
+    date = models.BigIntegerField(blank=True, null=False)
+    ask_id = models.IntegerField(db_column='askId', blank=True, null=False)
+
+    class Meta:
+        managed = False
+        db_table = 'reply'
