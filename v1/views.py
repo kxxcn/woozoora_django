@@ -9,7 +9,8 @@ from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from .fcm_notification import send_message_when_registered_account_book, send_message_when_invite_successful
+from .fcm_notification import send_message_when_registered_account_book, send_message_when_invite_successful, \
+    send_message_when_join_group
 from .models import User, Transaction, Ask, Notice
 from .serializer import UserSerializer, TransactionSerializer, NoticeSerializer, AskSerializer
 from .slack_message import send_to_slack_message
@@ -121,6 +122,8 @@ def transactions(request, user_id):
             return HttpResponse(status=204)
 
 
+@api_view(['POST', 'PUT'])
+@permission_classes((permissions.AllowAny,))
 def code(request, user_id):
     if request.method == 'POST':
         try:
@@ -145,6 +148,35 @@ def code(request, user_id):
             send_message_when_invite_successful(tokens, "channel_default", user.name)
 
             return HttpResponse(new_code)
+        except Exception as e:
+            return HttpResponseNotModified()
+    if request.method == 'PUT':
+        try:
+            data = json.loads(request.body)
+
+            new_code = data['code']
+            transfer = data['transfer']
+
+            user = User.objects.get(id=user_id)
+            others = User.objects.filter(code=new_code)
+
+            if new_code != user.code and others.count() != 0:
+                if transfer:
+                    for t in Transaction.objects.filter(user_id=user_id, code=user.code):
+                        t.code = new_code
+                        t.save()
+
+                    user.code = new_code
+                user.save()
+
+                groups = User.objects.filter(code=new_code).exclude(id=user_id)
+                tokens = list(map(lambda u: u.token, groups))
+
+                send_message_when_join_group(tokens, "channel_default", user.name)
+
+                return HttpResponse(new_code)
+            else:
+                return HttpResponseNotModified()
         except Exception as e:
             return HttpResponseNotModified()
 
