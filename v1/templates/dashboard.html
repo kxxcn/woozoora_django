@@ -3,8 +3,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <head>
-    <link rel="stylesheet" type="text/css" href="/static/css/default.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/chart.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/default.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chart.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
@@ -39,10 +39,10 @@
             <div class="incoming-card-title">가입자</div>
         </div>
         {% if user_variance_of_monthly > 0 %}
-        <img src="/static/img/increase.png" class="incoming-top-icon"/>
+        <img src="{% static 'img/increase.png' %}" class="incoming-top-icon"/>
         <div class="incoming-top-text" id="incoming-increase-color">{{user_variance_of_monthly}}%</div>
         {% elif user_variance_of_monthly < 0 %}
-        <img src="/static/img/decrease.png" class="incoming-top-icon"/>
+        <img src="{% static 'img/decrease.png' %}" class="incoming-top-icon"/>
         <div class="incoming-top-text" id="incoming-decrease-color">{{user_variance_of_monthly}}%</div>
         {% else %}
         <div class="incoming-top-text">{{user_variance_of_monthly}}%</div>
@@ -51,10 +51,10 @@
     <div class="incoming-bottom-container">
         <div class="incoming-card-count">{{monthly_of_users}}명</div>
         {% if user_variance_of_monthly > 0 %}
-        <img src="/static/img/increase.png" class="incoming-bottom-icon"/>
+        <img src="{% static 'img/increase.png' %}" class="incoming-bottom-icon"/>
         <div class="incoming-bottom-text" id="incoming-increase-color">{{user_variance_of_monthly}}%</div>
         {% elif user_variance_of_monthly < 0 %}
-        <img src="/static/img/decrease.png" class="incoming-bottom-icon"/>
+        <img src="{% static 'img/decrease.png' %}" class="incoming-bottom-icon"/>
         <div class="incoming-bottom-text" id="incoming-decrease-color">{{user_variance_of_monthly}}%</div>
         {% else %}
         <div class="incoming-bottom-text">{{user_variance_of_monthly}}%</div>
@@ -68,10 +68,10 @@
             <div class="incoming-card-title">가입자</div>
         </div>
         {% if user_variance_of_daily > 0 %}
-        <img src="/static/img/increase.png" class="incoming-top-icon"/>
+        <img src="{% static 'img/increase.png' %}" class="incoming-top-icon"/>
         <div class="incoming-top-text" id="incoming-increase-color">{{user_variance_of_daily}}%</div>
         {% elif user_variance_of_daily < 0 %}
-        <img src="/static/img/decrease.png" class="incoming-top-icon"/>
+        <img src="{% static 'img/decrease.png' %}" class="incoming-top-icon"/>
         <div class="incoming-top-text" id="incoming-decrease-color">{{user_variance_of_daily}}%</div>
         {% else %}
         <div class="incoming-top-text">{{user_variance_of_daily}}%</div>
@@ -80,10 +80,10 @@
     <div class="incoming-bottom-container">
         <div class="incoming-card-count">{{daily_of_users}}명</div>
         {% if user_variance_of_daily > 0 %}
-        <img src="/static/img/increase.png" class="incoming-bottom-icon"/>
+        <img src="{% static 'img/increase.png' %}" class="incoming-bottom-icon"/>
         <div class="incoming-bottom-text" id="incoming-increase-color">{{user_variance_of_daily}}%</div>
         {% elif user_variance_of_daily < 0 %}
-        <img src="/static/img/decrease.png" class="incoming-bottom-icon"/>
+        <img src="{% static 'img/decrease.png' %}" class="incoming-bottom-icon"/>
         <div class="incoming-bottom-text" id="incoming-decrease-color">{{user_variance_of_daily}}%</div>
         {% else %}
         <div class="incoming-bottom-text">{{user_variance_of_daily}}%</div>
@@ -97,10 +97,10 @@
             <div class="incoming-card-title">가계부</div>
         </div>
         {% if transaction_variance_of_monthly > 0 %}
-        <img src="/static/img/increase.png" class="incoming-top-icon"/>
+        <img src="{% static 'img/increase.png' %}" class="incoming-top-icon"/>
         <div class="incoming-top-text" id="incoming-increase-color">{{transaction_variance_of_monthly}}%</div>
         {% elif transaction_variance_of_monthly < 0 %}
-        <img src="/static/img/decrease.png" class="incoming-top-icon"/>
+        <img src="{% static 'img/decrease.png' %}" class="incoming-top-icon"/>
         <div class="incoming-top-text" id="incoming-decrease-color">{{transaction_variance_of_monthly}}%</div>
         {% else %}
         <div class="incoming-top-text">{{transaction_variance_of_monthly}}%</div>
@@ -109,10 +109,10 @@
     <div class="incoming-bottom-container">
         <div class="incoming-card-count">{{monthly_of_transactions}}건</div>
         {% if transaction_variance_of_monthly > 0 %}
-        <img src="/static/img/increase.png" class="incoming-bottom-icon"/>
+        <img src="{% static 'img/increase.png' %}" class="incoming-bottom-icon"/>
         <div class="incoming-bottom-text" id="incoming-increase-color">{{transaction_variance_of_monthly}}%</div>
         {% elif transaction_variance_of_monthly < 0 %}
-        <img src="/static/img/decrease.png" class="incoming-bottom-icon"/>
+        <img src="{% static 'img/decrease.png' %}" class="incoming-bottom-icon"/>
         <div class="incoming-bottom-text" id="incoming-decrease-color">{{transaction_variance_of_monthly}}%</div>
         {% else %}
         <div class="incoming-bottom-text">{{transaction_variance_of_monthly}}%</div>
@@ -126,10 +126,10 @@
             <div class="incoming-card-title">가계부</div>
         </div>
         {% if transaction_variance_of_daily > 0 %}
-        <img src="/static/img/increase.png" class="incoming-top-icon"/>
+        <img src="{% static 'img/increase.png' %}" class="incoming-top-icon"/>
         <div class="incoming-top-text" id="incoming-increase-color">{{transaction_variance_of_daily}}%</div>
         {% elif transaction_variance_of_daily < 0 %}
-        <img src="/static/img/decrease.png" class="incoming-top-icon"/>
+        <img src="{% static 'img/decrease.png' %}" class="incoming-top-icon"/>
         <div class="incoming-top-text" id="incoming-decrease-color">{{transaction_variance_of_daily}}%</div>
         {% else %}
         <div class="incoming-top-text">{{transaction_variance_of_daily}}%</div>
@@ -138,10 +138,10 @@
     <div class="incoming-bottom-container">
         <div class="incoming-card-count">{{daily_of_transactions}}건</div>
         {% if transaction_variance_of_daily > 0 %}
-        <img src="/static/img/increase.png" class="incoming-bottom-icon"/>
+        <img src="{% static 'img/increase.png' %}" class="incoming-bottom-icon"/>
         <div class="incoming-bottom-text" id="incoming-increase-color">{{transaction_variance_of_daily}}%</div>
         {% elif transaction_variance_of_daily < 0 %}
-        <img src="/static/img/decrease.png" class="incoming-bottom-icon"/>
+        <img src="{% static 'img/decrease.png' %}" class="incoming-bottom-icon"/>
         <div class="incoming-bottom-text" id="incoming-decrease-color">{{transaction_variance_of_daily}}%</div>
         {% else %}
         <div class="incoming-bottom-text">{{transaction_variance_of_daily}}%</div>
