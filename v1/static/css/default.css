@@ -1,0 +1,180 @@
+.body {
+    padding: 20;
+    background-color: rgb(246, 247, 251);
+}
+
+.round-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.overview-container {
+    flex-direction: row;
+    display: flex;
+}
+
+.total-card-container {
+    float: left;
+    width: 29%;
+    margin-right: 1%;
+    border-radius: 5px;
+    box-shadow: 3px 3px 4px 0px rgba(0, 0, 0, .1);
+    background-color: rgb(14, 23, 42);
+    padding: 20px;
+    flex-direction: column;
+    display: flex;
+}
+
+.total-card-title {
+    color: white;
+    font-size: 18px;
+    flex: 1;
+}
+
+.total-card-count {
+    color: white;
+    font-size: 30px;
+}
+
+.monthly-card-container {
+    float: left;
+    width: 69%;
+    margin-left: 1%;
+    border-radius: 5px;
+    background-color: white;
+    padding: 20px 20px 0px 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.monthly-card-title {
+    font-size: 18px;
+    color: rgb(14, 23, 42);
+}
+
+.incoming-card-container {
+    float: left;
+    width: 23%;
+    border-radius: 5px;
+    background-color: white;
+    margin-top: 20px;
+    padding: 5px 10px 5px 10px
+}
+
+.incoming-card-title {
+    width: 100%;
+    color: rgb(14, 23, 42);
+    font-size: 14px;
+}
+
+.incoming-card-count {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+    flex: 1;
+    color: rgb(14, 23, 42);
+}
+
+.incoming-top-container {
+    flex-direction: row;
+    display: flex;
+}
+
+.incoming-top-icon {
+    width: 11px;
+    height: 11px;
+    align-self: center;
+}
+
+.incoming-top-text {
+    font-size: 14px;
+    align-self: center;
+}
+
+.incoming-bottom-container {
+    flex-direction: row;
+    display: flex;
+}
+
+.incoming-bottom-icon {
+    width: 0px;
+    height: 0px;
+    align-self: flex-end;
+    margin-bottom: 4px;
+}
+
+.incoming-bottom-text {
+    font-size: 0px;
+    align-self: flex-end;
+    margin: 0px;
+}
+
+#incoming-card-margin {
+    margin-right: 2.6666%;
+}
+
+#incoming-increase-color {
+    color: #57CC99;
+}
+
+#incoming-decrease-color {
+    color: #FF6347;
+}
+
+@media (max-width: 600px) {
+    .overview-container {
+        flex-direction: column;
+        display: flex;
+    }
+
+    .total-card-container {
+        width: 100%;
+        margin-right: 0%;
+    }
+
+    .monthly-card-container {
+        width: 100%;
+        margin-left: 0%;
+        margin-top: 20px;
+        box-shadow: 3px 3px 4px 0px rgba(0, 0, 0, .1);
+    }
+
+    .incoming-card-container {
+        width: 100%;
+        float: none;
+        box-shadow: 3px 3px 4px 0px rgba(0, 0, 0, .1);
+        padding: 10px 20px 10px 20px
+    }
+
+    .incoming-card-title {
+        font-size: 16px;
+    }
+
+    .incoming-card-count {
+        font-size: 30px;
+    }
+
+    .incoming-top-container {
+        flex-direction: column;
+        display: flex;
+    }
+
+    .incoming-top-text {
+        font-size: 0px;
+    }
+
+    .incoming-top-icon {
+        width: 0px;
+        height: 0px;
+    }
+
+    .incoming-bottom-text {
+        font-size: 18px;
+    }
+
+    .incoming-bottom-icon {
+        width: 16px;
+        height: 16px;
+        margin-bottom: 5px;
+    }
+}

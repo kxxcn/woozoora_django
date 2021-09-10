@@ -1,6 +1,7 @@
+import calendar
 import json
 import time
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from distutils.util import strtobool
 
 from django.http import HttpResponse, HttpResponseNotModified, HttpResponseNotFound
@@ -22,6 +23,102 @@ def index(request):
 
 def personal(request):
     return render(request, 'personal.html')
+
+
+def dashboard(request):
+    total_users = User.objects.all().count()
+
+    current_year = datetime.now().year
+    current_month = datetime.now().month
+    current_day = datetime.now().day
+    last_day_of_current_month = calendar.monthrange(current_year, current_month)[1]
+
+    start_of_month = datetime(current_year, current_month, 1)
+    end_of_month = datetime(current_year, current_month, last_day_of_current_month, 23, 59, 59)
+
+    start_of_month_ms = start_of_month.timestamp() * 1000
+    end_of_month_ms = end_of_month.timestamp() * 1000
+
+    monthly_of_users = User.objects.filter(date__range=(start_of_month_ms, end_of_month_ms)).count()
+
+    start_of_day = datetime(current_year, current_month, current_day)
+    end_of_day = datetime(current_year, current_month, current_day, 23, 59, 59)
+
+    start_of_day_ms = start_of_day.timestamp() * 1000
+    end_of_day_ms = end_of_day.timestamp() * 1000
+
+    daily_of_users = User.objects.filter(date__range=(start_of_day_ms, end_of_day_ms)).count()
+
+    monthly_of_transactions = Transaction.objects.filter(date__range=(start_of_month_ms, end_of_month_ms)).count()
+
+    daily_of_transactions = Transaction.objects.filter(date__range=(start_of_day_ms, end_of_day_ms)).count()
+
+    incoming_users_of_monthly = []
+
+    for month in range(1, 13):
+        start_ms = datetime(current_year, month, 1).timestamp() * 1000
+        last_day = calendar.monthrange(current_year, month)[1]
+        end_ms = datetime(current_year, month, last_day).timestamp() * 1000
+        daily_of_users = User.objects.filter(date__range=(start_ms, end_ms)).count()
+        incoming_users_of_monthly.append(daily_of_users)
+
+    today = date.today()
+    month_ago = today.replace(day=1) - timedelta(days=1)
+    last_day_of_month_ago = calendar.monthrange(month_ago.year, month_ago.month)[1]
+    start_of_month_ago_ms = datetime(month_ago.year, month_ago.month, 1).timestamp() * 1000
+    end_of_month_ago_ms = datetime(month_ago.year, month_ago.month, last_day_of_month_ago).timestamp() * 1000
+
+    prev_monthly_of_users = User.objects.filter(date__range=(start_of_month_ago_ms, end_of_month_ago_ms)).count()
+
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+
+    start_of_yesterday_ms = datetime(yesterday.year, yesterday.month, yesterday.day).timestamp() * 1000
+    end_of_yesterday_ms = datetime(yesterday.year, yesterday.month, yesterday.day, 23, 59, 59).timestamp() * 1000
+
+    if prev_monthly_of_users == 0:
+        user_variance_of_monthly = monthly_of_users * 100
+    else:
+        user_variance_of_monthly = (monthly_of_users - prev_monthly_of_users) / prev_monthly_of_users * 100
+
+    prev_daily_of_users = User.objects.filter(date__range=(start_of_yesterday_ms, end_of_yesterday_ms)).count()
+
+    if prev_daily_of_users == 0:
+        user_variance_of_daily = daily_of_users * 100
+    else:
+        user_variance_of_daily = (daily_of_users - prev_daily_of_users) / prev_daily_of_users * 100
+
+    prev_monthly_of_transactions = Transaction.objects \
+        .filter(date__range=(start_of_month_ago_ms, end_of_month_ago_ms)) \
+        .count()
+
+    if prev_monthly_of_transactions == 0:
+        transaction_variance_of_monthly = monthly_of_transactions * 100
+    else:
+        transaction_variance_of_monthly = (monthly_of_transactions - prev_monthly_of_transactions) / prev_monthly_of_transactions * 100
+
+    prev_daily_of_transactions = Transaction.objects \
+        .filter(date__range=(start_of_yesterday_ms, end_of_yesterday_ms)) \
+        .count()
+
+    if prev_daily_of_transactions == 0:
+        transaction_variance_of_daily = daily_of_transactions * 100
+    else:
+        transaction_variance_of_daily = (daily_of_transactions - prev_daily_of_transactions) / prev_daily_of_transactions * 100
+
+    context = {
+        'total_users': total_users,
+        'monthly_of_users': monthly_of_users,
+        'daily_of_users': daily_of_users,
+        'monthly_of_transactions': monthly_of_transactions,
+        'daily_of_transactions': daily_of_transactions,
+        'incoming_users': incoming_users_of_monthly,
+        'user_variance_of_monthly': user_variance_of_monthly,
+        'user_variance_of_daily': user_variance_of_daily,
+        'transaction_variance_of_monthly': transaction_variance_of_monthly,
+        'transaction_variance_of_daily': transaction_variance_of_daily
+    }
+    return render(request, 'dashboard.html', context=context)
 
 
 def source(request):
@@ -96,7 +193,6 @@ def register_user(request):
 
             return HttpResponse(status=204)
         except Exception as e:
-            print(e)
             return HttpResponseNotModified()
 
 
@@ -383,7 +479,6 @@ def leave(request, user_id):
             Transaction.objects.filter(user_id=user_id).delete()
             return HttpResponse(status=204)
         except Exception as e:
-            print(e)
             return HttpResponseNotModified()
 
 
@@ -408,5 +503,4 @@ def reply(request):
             serializer = AskSerializer(asks, many=True)
             return Response(serializer.data)
         except Exception as e:
-            print(e)
             return HttpResponseNotFound()
