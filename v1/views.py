@@ -95,7 +95,8 @@ def dashboard(request):
     if prev_monthly_of_transactions == 0:
         transaction_variance_of_monthly = monthly_of_transactions * 100
     else:
-        transaction_variance_of_monthly = (monthly_of_transactions - prev_monthly_of_transactions) / prev_monthly_of_transactions * 100
+        transaction_variance_of_monthly = (
+                                                      monthly_of_transactions - prev_monthly_of_transactions) / prev_monthly_of_transactions * 100
 
     prev_daily_of_transactions = Transaction.objects \
         .filter(date__range=(start_of_yesterday_ms, end_of_yesterday_ms)) \
@@ -104,7 +105,8 @@ def dashboard(request):
     if prev_daily_of_transactions == 0:
         transaction_variance_of_daily = daily_of_transactions * 100
     else:
-        transaction_variance_of_daily = (daily_of_transactions - prev_daily_of_transactions) / prev_daily_of_transactions * 100
+        transaction_variance_of_daily = (
+                                                    daily_of_transactions - prev_daily_of_transactions) / prev_daily_of_transactions * 100
 
     context = {
         'total_users': total_users,
@@ -191,7 +193,7 @@ def register_user(request):
 
             send_message_when_invite_successful(tokens, "channel_default", data['name'])
 
-            return HttpResponse(status=204)
+            return HttpResponse(t_code)
         except Exception as e:
             return HttpResponseNotModified()
 
@@ -315,10 +317,13 @@ def transaction(request):
 
             is_new_transaction = filtered_list.count() == 0
 
+            user_id = data['user_id']
+            user = User.objects.get(id=user_id)
+
             if is_new_transaction:
                 new_transaction = Transaction(
-                    user_id=data['user_id'],
-                    code=data['code'],
+                    user_id=user_id,
+                    code=user.code,
                     category=data['category'],
                     name=data['name'],
                     description=data['description'],
