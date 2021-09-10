@@ -113,10 +113,10 @@ def dashboard(request):
         'monthly_of_transactions': monthly_of_transactions,
         'daily_of_transactions': daily_of_transactions,
         'incoming_users': incoming_users_of_monthly,
-        'user_variance_of_monthly': user_variance_of_monthly,
-        'user_variance_of_daily': user_variance_of_daily,
-        'transaction_variance_of_monthly': transaction_variance_of_monthly,
-        'transaction_variance_of_daily': transaction_variance_of_daily
+        'user_variance_of_monthly': round(user_variance_of_monthly, 1),
+        'user_variance_of_daily': round(user_variance_of_daily, 1),
+        'transaction_variance_of_monthly': round(transaction_variance_of_monthly, 1),
+        'transaction_variance_of_daily': round(transaction_variance_of_daily, 1)
     }
     return render(request, 'dashboard.html', context=context)
 
