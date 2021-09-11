@@ -59,8 +59,8 @@ def dashboard(request):
         start_ms = datetime(current_year, month, 1).timestamp() * 1000
         last_day = calendar.monthrange(current_year, month)[1]
         end_ms = datetime(current_year, month, last_day).timestamp() * 1000
-        daily_of_users = User.objects.filter(date__range=(start_ms, end_ms)).count()
-        incoming_users_of_monthly.append(daily_of_users)
+        users = User.objects.filter(date__range=(start_ms, end_ms)).count()
+        incoming_users_of_monthly.append(users)
 
     today = date.today()
     month_ago = today.replace(day=1) - timedelta(days=1)
