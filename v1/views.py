@@ -4,7 +4,7 @@ import time
 from datetime import datetime, date, timedelta
 from distutils.util import strtobool
 
-from django.http import HttpResponse, HttpResponseNotModified, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotModified, HttpResponseNotFound, HttpResponseServerError
 from django.shortcuts import render
 from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
@@ -432,7 +432,7 @@ def transaction(request):
                 )
             return HttpResponse(status=204)
         except Exception as e:
-            return HttpResponseNotModified()
+            return HttpResponseServerError(e)
     elif request.method == 'DELETE':
         try:
             data = json.loads(request.body)
