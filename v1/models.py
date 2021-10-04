@@ -24,10 +24,12 @@ class Transaction(models.Model):
     code = models.CharField(max_length=20, blank=True, null=True)
     category = models.CharField(max_length=20, blank=True, null=True)
     name = models.CharField(max_length=50, blank=True, null=True)
+    domain = models.CharField(max_length=50, blank=True)
     description = models.CharField(max_length=500, blank=True, null=True)
     price = models.IntegerField(blank=True, null=True)
     date = models.BigIntegerField(blank=True, null=True)
     payment = models.IntegerField(blank=True, null=True)
+    type = models.IntegerField(blank=True)
 
     class Meta:
         managed = False

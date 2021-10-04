@@ -96,7 +96,7 @@ def dashboard(request):
         transaction_variance_of_monthly = monthly_of_transactions * 100
     else:
         transaction_variance_of_monthly = (
-                                                      monthly_of_transactions - prev_monthly_of_transactions) / prev_monthly_of_transactions * 100
+                                                  monthly_of_transactions - prev_monthly_of_transactions) / prev_monthly_of_transactions * 100
 
     prev_daily_of_transactions = Transaction.objects \
         .filter(date__range=(start_of_yesterday_ms, end_of_yesterday_ms)) \
@@ -106,7 +106,7 @@ def dashboard(request):
         transaction_variance_of_daily = daily_of_transactions * 100
     else:
         transaction_variance_of_daily = (
-                                                    daily_of_transactions - prev_daily_of_transactions) / prev_daily_of_transactions * 100
+                                                daily_of_transactions - prev_daily_of_transactions) / prev_daily_of_transactions * 100
 
     context = {
         'total_users': total_users,
@@ -320,16 +320,60 @@ def transaction(request):
             user_id = data['user_id']
             user = User.objects.get(id=user_id)
 
+            t_category = data['category']
+
+            try:
+                t_type = data['type']
+                t_domain = data['domain']
+            except:
+                t_type = 0
+                if t_category == 0:
+                    t_domain = '식비'
+                elif t_category == 1:
+                    t_domain = '교통/차량'
+                elif t_category == 2:
+                    t_domain = '문화생활'
+                elif t_category == 3:
+                    t_domain = '마트/편의점'
+                elif t_category == 4:
+                    t_domain = '패션/미용'
+                elif t_category == 5:
+                    t_domain = '생활용품'
+                elif t_category == 6:
+                    t_domain = '주거/통신'
+                elif t_category == 7:
+                    t_domain = '건강'
+                elif t_category == 8:
+                    t_domain = '교육'
+                elif t_category == 9:
+                    t_domain = '경조사/회비'
+                elif t_category == 10:
+                    t_domain = '부모님'
+                elif t_category == 11:
+                    t_domain = '기타'
+                elif t_category == 12:
+                    t_domain = '카페'
+                elif t_category == 13:
+                    t_domain = '육아'
+                elif t_category == 14:
+                    t_domain = '의료'
+                elif t_category == 15:
+                    t_domain = '대출'
+                else:
+                    t_domain = '보험'
+
             if is_new_transaction:
                 new_transaction = Transaction(
                     user_id=user_id,
                     code=user.code,
-                    category=data['category'],
+                    category=t_category,
                     name=data['name'],
+                    domain=t_domain,
                     description=data['description'],
                     price=data['price'],
                     date=data['date'],
-                    payment=data['payment']
+                    payment=data['payment'],
+                    type=t_type
                 )
                 new_transaction.save()
             else:
@@ -337,6 +381,7 @@ def transaction(request):
                 filtered_list.update(
                     category=data['category'],
                     name=data['name'],
+                    domain=t_domain,
                     description=data['description'],
                     price=data['price'],
                     date=data['date'],
@@ -352,7 +397,13 @@ def transaction(request):
                 groups = User.objects.filter(code=data['code']).exclude(id=user_id)
                 tokens = list(map(lambda u: u.token, groups))
 
-                title = '지출 {}원 {}'.format(
+                if t_type == 0:
+                    t_title = "소비"
+                else:
+                    t_title = "수입"
+
+                title = '{} {}원 {}'.format(
+                    t_title,
                     formatted_price,
                     data['name']
                 )
@@ -376,7 +427,8 @@ def transaction(request):
                     str(new_transaction.id),
                     data['name'],
                     str(data['date']),
-                    str(data['price'])
+                    str(data['price']),
+                    str(t_type)
                 )
             return HttpResponse(status=204)
         except Exception as e:

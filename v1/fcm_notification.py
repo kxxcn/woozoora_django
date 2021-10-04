@@ -13,6 +13,7 @@ def send_message_when_registered_account_book(
         transaction_name,
         transaction_date,
         transaction_price,
+        transaction_type,
 ):
     try:
         message = messaging.MulticastMessage(
@@ -26,7 +27,8 @@ def send_message_when_registered_account_book(
                 'notification_transaction_id': transaction_id,
                 'notification_transaction_name': transaction_name,
                 'notification_transaction_date': transaction_date,
-                'notification_transaction_price': transaction_price
+                'notification_transaction_price': transaction_price,
+                'notification_transaction_type': transaction_type
             },
             tokens=registration_tokens,
         )
