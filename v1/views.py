@@ -430,7 +430,13 @@ def transaction(request):
                     str(data['price']),
                     str(t_type)
                 )
-            return HttpResponse(status=204)
+
+            if new_transaction is None:
+                t_id = Transaction.objects.get(id=data['id']).id
+            else:
+                t_id = new_transaction.id
+
+            return HttpResponse(t_id)
         except Exception as e:
             return HttpResponseServerError(e)
     elif request.method == 'DELETE':
