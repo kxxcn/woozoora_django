@@ -26,7 +26,7 @@
         <div class="total-card-count">{{total_users}}명</div>
     </div>
     <div class="monthly-card-container">
-        <div class="monthly-card-title">2021년 월별 인입 통계</div>
+        <script>document.write('<div class="monthly-card-title">' + new Date().getFullYear() + '년 월별 인입 통계</div>')</script>
         <figure class="highcharts-figure">
             <div id="container"/>
         </figure>
